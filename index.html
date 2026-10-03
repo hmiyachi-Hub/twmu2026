@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>地域医療実習 | 掛川東病院</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+  :root {
+    --accent: #00ada9;
+    --accent-ink: #00807d;
+    --accent-soft: #e6f6f6;
+    --ink: #1f2a2e;
+    --sub: #6b7a80;
+    --line: #e7ecee;
+    --bg: #f7f9f9;
+    --card: #ffffff;
+    --warn: #c77700;
+    --warn-soft: #fff4e2;
+    --danger: #b3261e;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'BIZ UDPGothic', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  a { color: var(--accent-ink); }
+
+  .hd { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  .hd-in { max-width: 760px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { background: none; border: 0; padding: 0; font-weight: 700; font-size: 16px; letter-spacing: .04em; cursor: pointer; }
+  .brand span { color: var(--accent); margin-left: 6px; font-size: 12px; }
+  .nav { display: flex; gap: 4px; }
+  .nav button { background: none; border: 0; padding: 6px 12px; border-radius: 999px; color: var(--sub); cursor: pointer; font-size: 14px; position: relative; }
+  .nav button.on { background: var(--accent-soft); color: var(--accent-ink); font-weight: 700; }
+  .nav .dot { position: absolute; top: 2px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--warn); }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 80px; }
+  .loading { color: var(--sub); text-align: center; padding: 60px 0; }
+  .hello { margin: 4px 0 16px; font-size: 20px; font-weight: 700; }
+  .hello small { display: block; font-size: 13px; font-weight: 400; color: var(--sub); }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .card h2 { font-size: 15px; margin: 0 0 12px; color: var(--sub); font-weight: 700; letter-spacing: .04em; }
+  .card h3 { font-size: 17px; margin: 0 0 4px; }
+
+  .days { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 10px; margin: 0 -2px 8px; scrollbar-width: none; }
+  .days::-webkit-scrollbar { display: none; }
+  .days button { flex: none; width: 52px; border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 6px 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; line-height: 1.3; }
+  .days button b { font-size: 15px; }
+  .days button small { font-size: 11px; color: var(--sub); }
+  .days button.off { background: #f1f3f4; color: #8a979c; }
+  .days button.today { border-color: var(--accent); }
+  .days button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .days button.on small { color: #fff; }
+
+  .dayhd { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 0 0 12px; }
+  .dayhd h2 { font-size: 20px; margin: 0; }
+  .meet { background: var(--accent-soft); border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; font-size: 14px; }
+
+  .slot { border-top: 1px solid var(--line); padding: 14px 0; }
+  .slot:first-of-type { border-top: 0; padding-top: 0; }
+  .slot .when { font-size: 12px; color: var(--sub); font-weight: 700; letter-spacing: .1em; display: flex; gap: 8px; align-items: center; }
+  .slot .what { font-size: 17px; font-weight: 700; margin: 4px 0; line-height: 1.5; }
+  .slot dl { display: grid; grid-template-columns: max-content 1fr; gap: 0 12px; margin: 4px 0 0; font-size: 14px; }
+  .slot dt { color: var(--sub); }
+  .slot dd { margin: 0; }
+  .slot .pts { margin-top: 8px; background: var(--bg); border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+  .slot .pts b { display: block; font-size: 12px; color: var(--accent-ink); }
+  .slot.off .what { color: var(--sub); font-weight: 400; }
+
+  .chip { display: inline-block; font-size: 12px; padding: 1px 10px; border-radius: 999px; white-space: nowrap; font-weight: 700; letter-spacing: 0; }
+  .sc-医療 { background: #e8f0fb; color: #2f62a8; }
+  .sc-介護・リハ { background: #e5f5ea; color: #2a8a4a; }
+  .sc-看護 { background: #fde9ef; color: #b23a62; }
+  .sc-行政・福祉 { background: #efeafc; color: #6446b8; }
+  .sc-まちづくり { background: var(--warn-soft); color: var(--warn); }
+  .chip.ok { background: var(--accent-soft); color: var(--accent-ink); }
+  .chip.late { background: #fde8e7; color: var(--danger); }
+  .chip.gray { background: #f1f3f4; color: #5f6d72; }
+
+  .todo { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-top: 1px solid var(--line); }
+  .todo:first-of-type { border-top: 0; padding-top: 0; }
+  .todo .t { flex: 1; min-width: 0; }
+  .todo .t b { display: block; }
+  .todo.done .t > b { color: var(--sub); }
+  .todo .d { font-size: 13px; color: var(--sub); margin: 2px 0 0; }
+  .check { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--line); background: #fff; cursor: pointer; font-size: 16px; color: transparent; }
+  .check.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .check.ro { cursor: default; }
+  .subs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .subs button { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 4px 10px; font-size: 13px; cursor: pointer; }
+  .subs button:hover { border-color: var(--accent); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--accent); background: var(--accent); color: #fff; font-weight: 700; cursor: pointer; text-decoration: none; font-size: 14px; }
+  .btn.ghost { background: #fff; color: var(--accent-ink); }
+  .btn.danger { background: #fff; color: var(--danger); border-color: #f0c9c6; }
+  .btn.sm { padding: 6px 12px; font-size: 13px; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .back { background: none; border: 0; color: var(--sub); padding: 0; margin-bottom: 12px; cursor: pointer; }
+  .muted { color: var(--sub); font-size: 13px; }
+  .pre { white-space: pre-wrap; }
+  .notice { background: var(--warn-soft); color: #7a4a00; border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; font-size: 14px; }
+  .fb { background: var(--accent-soft); border-radius: 12px; padding: 12px 14px; margin-top: 8px; }
+  .fb .by { font-size: 12px; color: var(--accent-ink); font-weight: 700; }
+  .fb p { margin: 2px 0 0; white-space: pre-wrap; }
+
+  .mat { display: block; width: 100%; text-align: left; cursor: pointer; }
+  .mat:hover { border-color: var(--accent); }
+  .mat h3 { margin: 0; }
+
+  .stu { display: block; width: 100%; text-align: left; cursor: pointer; padding: 14px 16px; }
+  .stu:hover { border-color: var(--accent); }
+  .stu .row { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .stu ul { list-style: none; margin: 8px 0 0; padding: 0; font-size: 13px; }
+  .stu li { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+
+  label.f { display: block; font-size: 13px; font-weight: 700; margin: 10px 0 6px; }
+  textarea, input[type=text] { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #fff; }
+  textarea { min-height: 72px; resize: vertical; }
+  textarea:focus, input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+
+  .links td { padding: 8px 6px; border-bottom: 1px solid var(--line); font-size: 13px; vertical-align: top; }
+  .links input { font-size: 12px; padding: 6px 8px; }
+  .scroll { overflow-x: auto; }
+
+  .req { font-size: 11px; color: var(--danger); font-weight: 700; margin-left: 4px; }
+  .hint { margin: -2px 0 6px; font-size: 12px; color: var(--sub); }
+  .stances { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pick { border: 2px solid transparent; padding: 6px 14px; font-size: 14px; cursor: pointer; opacity: .45; }
+  .pick.on { opacity: 1; border-color: currentColor; }
+  .pick:disabled { cursor: default; }
+  .ro-val { margin: 0; padding: 8px 12px; background: var(--bg); border-radius: 10px; }
+  dl.ans { margin: 6px 0 0; font-size: 14px; }
+  dl.ans dt { font-size: 12px; color: var(--sub); font-weight: 700; margin-top: 8px; }
+  dl.ans dd { margin: 2px 0 0; white-space: pre-wrap; }
+  .rec { border-top: 1px solid var(--line); padding: 12px 0; }
+  .rec:first-of-type { border-top: 0; padding-top: 0; }
+  .rec-hd { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .goal { margin: 6px 0 0; font-size: 14px; background: var(--accent-soft); border-radius: 8px; padding: 6px 10px; }
+
+  [hidden] { display: none !important; }
+  .modal { position: fixed; inset: 0; background: rgba(20, 30, 33, .72); z-index: 20; display: flex; flex-direction: column; }
+  .modal .bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 14px; background: #fff; }
+  .modal .bar b { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .modal .body { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: flex-start; padding: 12px; }
+  .modal img { max-width: 100%; height: auto; background: #fff; }
+  .modal iframe { width: 100%; max-width: 820px; height: 100%; min-height: 70vh; border: 0; background: #fff; border-radius: 8px; }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 14px; z-index: 30; max-width: calc(100% - 32px); }
+  .toast.err { background: var(--danger); }
+
+  @media (max-width: 480px) {
+    .hd-in { flex-wrap: wrap; row-gap: 6px; }
+    .nav button { padding: 6px 9px; font-size: 13px; }
+    .card { padding: 16px; }
+    .dayhd h2 { font-size: 18px; }
+  }
+</style>
+
+</head>
+<body>
+  <header class="hd">
+    <div class="hd-in">
+      <button class="brand" data-go="home">地域医療実習<span>掛川東病院</span></button>
+      <nav id="nav" class="nav"></nav>
+    </div>
+  </header>
+  <main id="view" class="wrap">
+    <p class="loading">読み込んでいます…</p>
+  </main>
+  <div id="modal" class="modal" hidden></div>
+  <div id="toast" class="toast" hidden></div>
+  <script>
+(function () {
+  var m = (location.hash + '&' + location.search).match(/k=([0-9a-f]{32})/);
+  window.BOOT = { token: m ? m[1] : '', api: 'https://script.google.com/macros/s/AKfycbyyTIjJxfafPChwLsXoSrslqclYY0ToIvs4CP9c86p_9Tgd91Z-TIkcNxCuRbZ6sjPB/exec' };
+})();
+</script>
+<script>
+(function () {
+  const B = window.BOOT;
+  const T = B.token;
+  let STAFF = false;
+  let ADMIN = false;
+  const $view = document.getElementById('view');
+  const $nav = document.getElementById('nav');
+  const $modal = document.getElementById('modal');
+  const state = { route: 'home', date: null, userId: null, home: null, form: null, formData: null };
+
+  // ---------- 共通 ----------
+
+  async function call(fn, ...args) {
+    let res;
+    try {
+      res = await fetch(B.api, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ fn, args: [T, ...args] }),
+        credentials: 'omit',
+        redirect: 'follow',
+      });
+    } catch (e) {
+      throw new Error('通信に失敗しました。電波の良い場所でもう一度お試しください。');
+    }
+    const data = await res.json().catch(() => null);
+    if (!data) throw new Error('サーバーからの応答を読み取れませんでした。もう一度お試しください。');
+    if (data.err) throw new Error(data.err);
+    return data.ok;
+  }
+
+  // Googleの配信処理は、文字列や正規表現の中にあるスラッシュ2つ・スラッシュとアスタリスクの並びもコメントとして削るため、その並びを書かない
+  function isImage(mime) { return String(mime || '').indexOf('image/') === 0; }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function toast(m, err) {
+    const t = document.getElementById('toast');
+    t.textContent = m;
+    t.className = 'toast' + (err ? ' err' : '');
+    t.hidden = false;
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => { t.hidden = true; }, err ? 6000 : 2400);
+  }
+
+  function fail(e) {
+    const m = String((e && e.message) || e || '').replace(/^(Exception|Error):\s{0,9}/, '');
+    toast(m || '通信に失敗しました。もう一度お試しください。', true);
+  }
+
+  function stance(s) { return s ? `<span class="chip sc-${esc(s)}">${esc(s)}</span>` : ''; }
+
+  function setNav() {
+    const items = STAFF
+      ? [['home', '今日'], ['schedule', '日程'], ['materials', '資料']].concat(ADMIN ? [['links', 'リンク']] : [])
+      : [['home', '今日'], ['todos', 'To Do'], ['history', '記録'], ['schedule', '日程'], ['materials', '資料']];
+    const overdue = !STAFF && state.home && state.home.counts && state.home.counts.overdue > 0;
+    $nav.innerHTML = items.map(([r, label]) => {
+      const on = state.route === r || (r === 'home' && (state.route === 'student' || state.route === 'form'));
+      return `<button data-go="${r}" class="${on ? 'on' : ''}">${label}${r === 'todos' && overdue ? '<i class="dot"></i>' : ''}</button>`;
+    }).join('');
+  }
+
+  function loading() { $view.innerHTML = '<p class="loading">読み込んでいます…</p>'; }
+
+  async function go(route, opts) {
+    state.route = route;
+    Object.assign(state, opts || {});
+    setNav();
+    loading();
+    window.scrollTo(0, 0);
+    try {
+      if (route === 'home') {
+        state.home = await call('apiHome', state.date);
+        state.date = STAFF ? state.home.focus.key : state.home.day.key;
+        $view.innerHTML = STAFF ? viewStaffHome(state.home) : viewHome(state.home);
+        setNav();
+      } else if (route === 'todos') {
+        $view.innerHTML = viewTodos(await call('apiTodos'));
+      } else if (route === 'schedule') {
+        $view.innerHTML = viewSchedule(await call('apiSchedule'));
+        const t = document.querySelector('.is-today');
+        if (t) t.scrollIntoView({ block: 'start' });
+      } else if (route === 'materials') {
+        $view.innerHTML = viewMaterials(await call('apiMaterials'));
+      } else if (route === 'student') {
+        $view.innerHTML = viewStudent(await call('apiStudent', state.userId));
+        const t = document.getElementById('d-' + state.date);
+        if (t) t.scrollIntoView({ block: 'start' });
+      } else if (route === 'form') {
+        const f = state.form;
+        state.formData = await call('apiForm', f.todoId, f.date, f.userId || '');
+        $view.innerHTML = viewForm(state.formData);
+        restoreDraft();
+      } else if (route === 'history') {
+        $view.innerHTML = viewHistory(await call('apiHistory'));
+      } else if (route === 'links') {
+        $view.innerHTML = viewLinks(await call('apiLinks'));
+      }
+    } catch (e) {
+      $view.innerHTML = '<p class="loading">読み込めませんでした。</p>';
+      fail(e);
+    }
+  }
+
+  function rerender(data) {
+    state.home = data;
+    if (state.route === 'home') $view.innerHTML = viewHome(data);
+    else go(state.route);
+    setNav();
+  }
+
+  // ---------- 日程の表示 ----------
+
+  function slotHtml(s) {
+    return `
+      <div class="slot ${s.off ? 'off' : ''}">
+        <div class="when">${esc(s.slot)} ${stance(s.stance)}</div>
+        <div class="what">${esc(s.title)}</div>
+        ${s.place || s.staff ? `<dl>
+          ${s.place ? `<dt>場所</dt><dd>${esc(s.place)}</dd>` : ''}
+          ${s.staff ? `<dt>担当</dt><dd>${esc(s.staff)}</dd>` : ''}
+        </dl>` : ''}
+        ${s.points && !s.off ? `<div class="pts"><b>見るポイント${s.stanceLabel ? '（' + esc(s.stanceLabel) + '）' : ''}</b>${esc(s.points)}</div>` : ''}
+      </div>`;
+  }
+
+  function dayCard(d) {
+    return `
+      <section class="card">
+        <div class="dayhd"><h2>${esc(d.label)}</h2>${d.isToday ? '<span class="chip ok">今日</span>' : ''}</div>
+        ${d.meet && (d.meet.place || d.meet.time) ? `<div class="meet">初日の集合：${esc(d.meet.time)} ${esc(d.meet.place)}</div>` : ''}
+        ${d.slots.length ? d.slots.map(slotHtml).join('') : '<p class="muted">予定は登録されていません。</p>'}
+      </section>`;
+  }
+
+  function dayStrip(days, current) {
+    return `<div class="days">${days.map(d => {
+      const s = d.short;
+      return `<button data-day="${d.key}" class="${d.key === current ? 'on' : ''} ${d.off ? 'off' : ''} ${d.isToday ? 'today' : ''}">
+        <b>${esc(s.md)}</b><small>${esc(s.wd)}${d.isToday ? '・今日' : ''}</small></button>`;
+    }).join('')}</div>`;
+  }
+
+  // ---------- To Do ----------
+
+  function subsHtml(subs) {
+    if (!subs.length) return '';
+    return `<div class="subs">${subs.map(s =>
+      `<button data-file="${esc(s.subId)}" data-name="${esc(s.name)}">${isImage(s.mime) ? '🖼' : '📄'} ${esc(s.at)} 提出</button>`).join('')}</div>`;
+  }
+
+  function todoHtml(t, opts) {
+    const ro = (opts && opts.readonly) || t.upload || t.form;
+    return `
+      <div class="todo ${t.done ? 'done' : ''}">
+        <button class="check ${t.done ? 'on' : ''} ${ro ? 'ro' : ''}" ${ro ? '' : `data-toggle="${esc(t.todoId)}" data-date="${t.date}" data-done="${t.done ? 1 : 0}"`}
+          aria-label="${t.done ? '完了' : '未完了'}">✓</button>
+        <div class="t">
+          <b>${esc(t.title)}</b>
+          ${opts && opts.showDate ? `<span class="muted">${esc(t.dateLabel)}</span> ` : ''}
+          ${t.overdue ? '<span class="chip late">未提出</span>' : ''}
+          ${t.detail && !(opts && opts.compact) ? `<p class="d">${esc(t.detail)}</p>` : ''}
+          ${subsHtml(t.subs)}
+          ${t.form ? formChip(t.entryStatus) : ''}
+          ${t.form && !(opts && opts.readonly) ? `<div style="margin-top:8px"><button class="btn sm ${t.entryStatus === 'submitted' ? 'ghost' : ''}" data-form="${esc(t.todoId)}" data-date="${t.date}">✏️ ${t.entryStatus === 'submitted' ? '見る・直す' : t.entryStatus === 'draft' ? '続きを書く' : '記入する'}</button></div>`
+            : t.upload && !(opts && opts.readonly) ? `<div style="margin-top:8px"><button class="btn sm ${t.subs.length ? 'ghost' : ''}" data-upload="${esc(t.todoId)}" data-date="${t.date}">📷 ${t.subs.length ? '追加で提出' : '写真・ファイルを提出'}</button></div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  function feedbackHtml(list) {
+    return list.map(f => `<div class="fb"><div class="by">${esc(f.by)}（${esc(f.at)}）</div><p>${esc(f.text)}</p></div>`).join('');
+  }
+
+  // ---------- 学生 ----------
+
+  function viewHome(d) {
+    const day = d.day;
+    return `
+      <p class="hello">${esc(d.me.name)}さん<small>${esc(d.me.courseName)}：${esc(d.me.start)}〜${esc(d.me.end)}</small></p>
+      ${d.counts.overdue ? `<p class="notice">まだ済んでいないTo Doが ${d.counts.overdue} 件あります。<button class="btn sm ghost" data-go="todos" style="margin-left:6px">確認する</button></p>` : ''}
+      ${dayStrip(d.days, day.key)}
+      ${dayCard(day)}
+      ${day.off ? '' : `
+      <section class="card">
+        <h2>この日のTo Do</h2>
+        ${d.dayTodos.length ? d.dayTodos.map(t => todoHtml(t)).join('') : '<p class="muted">この日のTo Doはありません。</p>'}
+        <p class="muted" style="margin:12px 0 0">記入内容には、患者さんの氏名など個人が特定できる情報を書かないでください。</p>
+      </section>`}
+      ${d.feedback.length ? `<section class="card"><h2>担当者からのコメント</h2>${feedbackHtml(d.feedback)}</section>` : ''}`;
+  }
+
+  function viewTodos(list) {
+    const left = list.filter(t => !t.done);
+    const groups = {};
+    list.forEach(t => { (groups[t.date] = groups[t.date] || { label: t.dateLabel, items: [] }).items.push(t); });
+    return `
+      <p class="hello">To Do<small>完了 ${list.length - left.length} / ${list.length} 件</small></p>
+      ${Object.keys(groups).map(k => `
+        <section class="card ${groups[k].items.some(t => t.isToday) ? 'is-today' : ''}">
+          <h2>${esc(groups[k].label)}${groups[k].items.some(t => t.isToday) ? ' ・今日' : ''}</h2>
+          ${groups[k].items.map(t => todoHtml(t, { compact: true })).join('')}
+        </section>`).join('')}`;
+  }
+
+  function viewSchedule(courses) {
+    return courses.map(c => `
+      <p class="hello">${esc(c.name)}の日程<small>${esc(c.start)}〜${esc(c.end)}</small></p>
+      ${c.days.map(d => `<div class="${d.isToday ? 'is-today' : ''}">${dayCard(d)}</div>`).join('')}`).join('');
+  }
+
+  function viewMaterials(list) {
+    return `
+      <p class="hello">資料<small>タップすると開きます</small></p>
+      ${list.map(m => `
+        <button class="card mat" ${m.url ? `data-url="${esc(m.url)}"` : `data-mat="${m.i}"`}>
+          <h3>${esc(m.title)}</h3>
+          ${m.note ? `<p class="muted" style="margin:4px 0 0">${esc(m.note)}</p>` : ''}
+        </button>`).join('')}
+      ${list.length ? '' : '<p class="muted">資料はまだ登録されていません。</p>'}`;
+  }
+
+  function formChip(status) {
+    return status === 'submitted' ? '<span class="chip ok">提出済</span>' : status === 'draft' ? '<span class="chip gray">下書き</span>' : '';
+  }
+
+  function answersHtml(list) {
+    if (!list.length) return '';
+    return `<dl class="ans">${list.map(a => `<dt>${esc(a.label)}</dt><dd>${a.stance ? a.text.split('・').map(stance).join(' ') : esc(a.text)}</dd>`).join('')}</dl>`;
+  }
+
+  function fieldHtml(f, v, readonly) {
+    const req = f.required ? '<span class="req">必須</span>' : '';
+    const head = `<label class="f" for="fd-${esc(f.id)}">${esc(f.label)} ${req}</label>${f.hint ? `<p class="hint">${esc(f.hint)}</p>` : ''}`;
+    if (f.kind === 'stance') {
+      const sel = Array.isArray(v) ? v : [];
+      return head + `<div class="stances" data-field="${esc(f.id)}" data-kind="stance">${state.formData.stances.map(x =>
+        `<button type="button" class="chip sc-${esc(x)} pick ${sel.indexOf(x) >= 0 ? 'on' : ''}" data-pick="${esc(x)}" ${readonly ? 'disabled' : ''}>${esc(x)}</button>`).join('')}</div>`;
+    }
+    const val = esc(v == null ? '' : v);
+    if (readonly) return head + `<p class="pre ro-val">${val || '<span class="muted">（未記入）</span>'}</p>`;
+    return head + (f.kind === 'text'
+      ? `<input type="text" id="fd-${esc(f.id)}" data-field="${esc(f.id)}" maxlength="200" value="${val}">`
+      : `<textarea id="fd-${esc(f.id)}" data-field="${esc(f.id)}" maxlength="4000">${val}</textarea>`);
+  }
+
+  function viewForm(d) {
+    const t = d.todo;
+    const back = d.readonly ? `<button class="back" data-student="${esc(d.studentId)}">← ${esc(d.studentName)}さんの記録に戻る</button>`
+      : '<button class="back" data-go="home">← 今日に戻る</button>';
+    return `
+      ${back}
+      <p class="hello">${esc(t.title)}<small>${esc(t.dateLabel)}${d.readonly ? '・' + esc(d.studentName) + 'さん' : ''}</small></p>
+      ${d.related.length ? `<section class="card"><h2>この日のチェックイン</h2>${answersHtml(d.related)}</section>` : ''}
+      <section class="card">
+        <div class="dayhd" style="margin:0 0 4px"><span class="muted">${d.status === 'submitted' ? '提出：' + esc(d.submittedAt) + (d.savedAt !== d.submittedAt ? '（最終更新 ' + esc(d.savedAt) + '）' : '') : d.status === 'draft' ? '下書き保存：' + esc(d.savedAt) : '未記入'}</span>${formChip(d.status)}</div>
+        ${t.detail ? `<p class="muted" style="margin:0 0 4px">${esc(t.detail)}</p>` : ''}
+        <p id="restored" class="notice" hidden>保存前の入力内容を復元しました。</p>
+        ${d.fields.map(f => fieldHtml(f, d.data[f.id], d.readonly)).join('')}
+        ${d.readonly ? '' : `<div class="btns" style="margin-top:16px">
+          <button class="btn" data-save="1">${d.status === 'submitted' ? '更新して提出' : '提出する'}</button>
+          <button class="btn ghost" data-save="0">下書き保存</button></div>
+          <p class="muted" style="margin:10px 0 0">患者さんの氏名など、個人が特定できる情報は書かないでください。</p>`}
+      </section>
+      ${t.upload ? `<section class="card"><h2>添付ファイル（任意）</h2>${subsHtml(t.subs) || '<p class="muted" style="margin:0">添付はありません。</p>'}
+        ${d.readonly ? '' : `<div style="margin-top:10px"><button class="btn sm ghost" data-upload="${esc(t.id)}" data-date="${t.date}">📎 写真・ファイルを添付</button></div>`}</section>` : ''}
+      ${d.feedback.length ? `<section class="card"><h2>担当者からのコメント</h2>${feedbackHtml(d.feedback)}</section>` : ''}`;
+  }
+
+  function collectForm() {
+    const data = {};
+    $view.querySelectorAll('[data-field]').forEach(el => {
+      if (el.dataset.kind === 'stance') {
+        data[el.dataset.field] = Array.from(el.querySelectorAll('.pick.on')).map(b => b.dataset.pick);
+      } else {
+        data[el.dataset.field] = el.value;
+      }
+    });
+    return data;
+  }
+
+  function draftKey() { return state.form ? 'twmu:' + B.token.slice(0, 8) + ':' + state.form.todoId + '|' + state.form.date : ''; }
+
+  function backupDraft() {
+    if (state.route !== 'form' || !state.formData || state.formData.readonly) return;
+    try { localStorage.setItem(draftKey(), JSON.stringify(collectForm())); } catch (e) { /* 保存できない環境では何もしない */ }
+  }
+
+  function restoreDraft() {
+    if (!state.formData || state.formData.readonly) return;
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (e) { saved = null; }
+    if (!saved || JSON.stringify(saved) === JSON.stringify(collectForm())) return;
+    Object.keys(saved).forEach(id => {
+      const el = $view.querySelector(`[data-field="${id}"]`);
+      if (!el) return;
+      if (el.dataset.kind === 'stance') {
+        el.querySelectorAll('.pick').forEach(b => b.classList.toggle('on', (saved[id] || []).indexOf(b.dataset.pick) >= 0));
+      } else {
+        el.value = saved[id];
+      }
+    });
+    const n = document.getElementById('restored');
+    if (n) n.hidden = false;
+  }
+
+  function clearDraft() { try { localStorage.removeItem(draftKey()); } catch (e) { /* noop */ } }
+
+  document.addEventListener('input', backupDraft);
+
+  function recordDay(d, staff) {
+    const items = d.items.filter(i => staff || i.answers.length || i.subs.length || i.form);
+    return `
+      <section class="card ${d.isToday ? 'is-today' : ''}" id="d-${d.key}">
+        <div class="dayhd"><h2>${esc(d.label)}</h2>${d.isToday ? '<span class="chip ok">今日</span>' : ''}</div>
+        ${items.map(i => `
+          <div class="rec">
+            <div class="rec-hd"><b>${esc(i.title)}</b>
+              ${i.form ? formChip(i.status) : i.done ? '<span class="chip ok">済</span>' : ''}
+              ${!i.done && i.overdue ? '<span class="chip late">未提出</span>' : ''}</div>
+            ${answersHtml(i.answers)}
+            ${subsHtml(i.subs)}
+            ${i.form && !staff ? `<button class="btn sm ghost" data-form="${esc(i.todoId)}" data-date="${d.key}" style="margin-top:6px">${i.status === 'submitted' ? '見る・直す' : i.status === 'draft' ? '続きを書く' : '記入する'}</button>` : ''}
+            ${i.form && staff && !i.answers.length ? '<p class="muted" style="margin:2px 0 0">未記入</p>' : ''}
+          </div>`).join('')}
+        ${d.feedback.length ? `<h2 style="margin:14px 0 0">担当者からのコメント</h2>${feedbackHtml(d.feedback)}` : ''}
+        ${staff ? `
+          <label class="f" for="fb-${d.key}">この日のコメント（学生に表示されます）</label>
+          <textarea id="fb-${d.key}" maxlength="1000" placeholder="良かった点、次に意識してほしいことなど"></textarea>
+          <div style="margin-top:8px"><button class="btn sm" data-feedback="${d.key}">コメントを送る</button></div>` : ''}
+      </section>`;
+  }
+
+  function viewHistory(days) {
+    return `
+      <p class="hello">記録<small>チェックイン・振り返り・各シートと、担当者からのコメント</small></p>
+      ${days.length ? days.map(d => recordDay(d, null)).join('') : '<section class="card"><p class="muted" style="margin:0">実習が始まると、ここに毎日の記録がたまっていきます。</p></section>'}`;
+  }
+
+  // ---------- 職員 ----------
+
+  function viewStaffHome(d) {
+    return `
+      <p class="hello">${esc(d.me.name)}さん<small>${d.me.role === 'admin' ? '管理者' : '職員'}用の画面です</small></p>
+      ${dayStrip(d.days, d.focus.key)}
+      ${d.courses.length ? d.courses.map(c => `
+        <section class="card">
+          <div class="dayhd"><h2>${esc(d.focus.label)}</h2><span class="chip gray">${esc(c.name)}</span></div>
+          ${c.day.slots.map(slotHtml).join('')}
+        </section>
+        ${c.day.off ? '' : c.students.map(s => `
+          <button class="card stu" data-student="${esc(s.id)}">
+            <div class="row"><h3>${esc(s.name)}</h3>
+              <span>${s.overdue ? `<span class="chip late">未提出 ${s.overdue}</span>` : '<span class="chip ok">遅れなし</span>'}</span></div>
+            ${s.goal ? `<p class="goal">今日の目標：${esc(s.goal)}</p>` : ''}
+            <ul>${s.todos.map(t => `<li><span>${esc(t.title)}</span><span class="${t.done ? '' : 'muted'}">${t.done ? '✓ 済' + (t.subs ? `（${t.subs}件）` : '') : '未'}</span></li>`).join('')}
+              <li><span>この日のコメント</span><span class="muted">${s.feedback ? s.feedback + '件' : 'なし'}</span></li></ul>
+          </button>`).join('')}`).join('')
+      : '<section class="card"><p class="muted" style="margin:0">この日は実習がありません。</p></section>'}`;
+  }
+
+  function viewStudent(s) {
+    return `
+      <button class="back" data-go="home">← 今日に戻る</button>
+      <p class="hello">${esc(s.name)}さん<small>${esc(s.courseName)}・記録とコメント（新しい日が上）</small></p>
+      ${s.days.map(d => recordDay(d, s.id)).join('')}`;
+  }
+
+  function viewLinks(d) {
+    const role = { admin: '管理者', staff: '職員', student: '学生' };
+    return `
+      <p class="hello">個人リンク<small>リンクを知っている人は、その人として操作できます。本人以外に共有しないでください。</small></p>
+      <section class="card">
+        <div class="btns">
+          <a class="btn ghost sm" href="${esc(d.dbUrl)}" target="_blank" rel="noopener">DB（日程・To Do・利用者）を開く</a>
+          <a class="btn ghost sm" href="${esc(d.folderUrl)}" target="_blank" rel="noopener">提出フォルダを開く</a>
+          <button class="btn sm" data-issue="1">トークン未発行の人にリンクを発行</button>
+        </div>
+        <p class="muted" style="margin:10px 0 0">職員を追加するときは、DBの users シートに user_id・name・role（staff）・active（TRUE）を入力してから「リンクを発行」を押してください。日程やTo Doの変更は1分ほどで反映されます。</p>
+      </section>
+      <section class="card scroll">
+        <table class="links" style="width:100%;border-collapse:collapse">
+          ${d.users.map(u => `<tr>
+            <td style="white-space:nowrap"><b>${esc(u.name)}</b><br><span class="muted">${role[u.role] || esc(u.role)}${u.course ? ' ・' + esc(u.course) + 'コース' : ''}${u.active ? '' : ' ・無効'}</span></td>
+            <td style="width:100%">${u.url ? `<input type="text" readonly value="${esc(u.url)}"><button class="btn sm ghost" data-copy="${esc(u.url)}" style="margin-top:6px">コピー</button>` : '<span class="muted">未発行</span>'}</td>
+          </tr>`).join('')}
+        </table>
+      </section>`;
+  }
+
+  // ---------- ファイル ----------
+
+  function openModal(title, bodyHtml, actions) {
+    $modal.innerHTML = `<div class="bar"><b>${esc(title)}</b><div class="btns">${actions || ''}<button class="btn sm ghost" data-close="1">閉じる</button></div></div><div class="body">${bodyHtml}</div>`;
+    $modal.hidden = false;
+  }
+
+  function closeModal() { $modal.hidden = true; $modal.innerHTML = ''; }
+
+  function b64Blob(data, mime) {
+    const bin = atob(data);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+  }
+
+  function showFile(f, actions) {
+    if (isImage(f.mime)) {
+      openModal(f.name, `<img alt="" src="data:${esc(f.mime)};base64,${f.data}">`, actions);
+      return;
+    }
+    const url = URL.createObjectURL(b64Blob(f.data, f.mime));
+    openModal(f.name, `<div class="card" style="max-width:420px;width:100%"><p>このファイルは画面内で表示できません。</p>
+      <div class="btns"><a class="btn" href="${url}" target="_blank" rel="noopener" download="${esc(f.name)}">開く・保存する</a></div></div>`, actions);
+  }
+
+  async function openSubmission(subId, name) {
+    openModal(name, '<p class="loading" style="color:#fff">読み込んでいます…</p>');
+    try {
+      const f = await call('apiFile', subId);
+      const canRemove = ADMIN || !STAFF;
+      showFile(f, canRemove ? `<button class="btn sm danger" data-remove="${esc(subId)}">提出を取り消す</button>` : '');
+    } catch (e) { closeModal(); fail(e); }
+  }
+
+  async function openMaterial(i) {
+    openModal('資料', '<p class="loading" style="color:#fff">読み込んでいます…</p>');
+    try {
+      const m = await call('apiMaterial', i);
+      if (m.kind === 'html') {
+        const fix = '<base target="_blank"><style>body{max-width:none!important;padding:16px!important;margin:0!important;font-size:15px}img,table{max-width:100%!important}td{padding:4px 6px}</style>';
+        const html = m.html.replace(/<\/head>/i, fix + '</head>');
+        openModal(m.title, '<iframe sandbox="allow-popups allow-popups-to-escape-sandbox" title="資料"></iframe>');
+        $modal.querySelector('iframe').srcdoc = html;
+      } else {
+        showFile({ name: m.name, mime: m.mime, data: m.data });
+      }
+    } catch (e) { closeModal(); fail(e); }
+  }
+
+  // ---------- 提出（写真は縮小してから送る） ----------
+
+  const picker = document.createElement('input');
+  picker.type = 'file';
+  picker.multiple = true;
+  picker.accept = 'image/' + '*,application/pdf,.pdf,.doc,.docx,.ppt,.pptx';
+  picker.hidden = true;
+  document.body.appendChild(picker);
+  let pending = null;
+
+  const EXT_MIME = { heic: 'image/heic', heif: 'image/heif', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', pdf: 'application/pdf',
+    doc: 'application/msword', docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ppt: 'application/vnd.ms-powerpoint', pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' };
+
+  function readDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result);
+      r.onerror = () => reject(new Error('ファイルを読み込めませんでした。'));
+      r.readAsDataURL(file);
+    });
+  }
+
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  async function prepare(file) {
+    const ext = (file.name.split('.').pop() || '').toLowerCase();
+    const mime = file.type || EXT_MIME[ext] || '';
+    if (isImage(mime) && mime !== 'image/gif') {
+      const src = URL.createObjectURL(file);
+      try {
+        const img = await loadImage(src);
+        const scale = Math.min(1, 1800 / Math.max(img.naturalWidth, img.naturalHeight));
+        const cv = document.createElement('canvas');
+        cv.width = Math.round(img.naturalWidth * scale);
+        cv.height = Math.round(img.naturalHeight * scale);
+        cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+        const url = cv.toDataURL('image/jpeg', 0.85);
+        return { name: file.name.replace(/\.[^.]+$/, '') + '.jpg', mime: 'image/jpeg', data: url.split(',')[1] };
+      } catch (e) {
+        // 縮小できない形式（一部のHEICなど）はそのまま送る
+      } finally {
+        URL.revokeObjectURL(src);
+      }
+    }
+    const url = await readDataUrl(file);
+    return { name: file.name, mime, data: url.split(',')[1] };
+  }
+
+  picker.addEventListener('change', async () => {
+    const files = Array.from(picker.files || []);
+    picker.value = '';
+    if (!pending || !files.length) return;
+    const { todoId, date, btn } = pending;
+    pending = null;
+    if (btn) { btn.disabled = true; btn.textContent = '送信中…'; }
+    try {
+      let data = null;
+      for (let i = 0; i < files.length; i++) {
+        toast(`送信中… ${i + 1} / ${files.length}`);
+        data = await call('apiUpload', todoId, date, await prepare(files[i]), '');
+      }
+      toast('提出しました');
+      state.date = date;
+      if (state.route === 'form') go('form'); else rerender(data);
+    } catch (e) {
+      fail(e);
+      if (btn) { btn.disabled = false; btn.textContent = '📷 写真・ファイルを提出'; }
+    }
+  });
+
+  // ---------- 操作 ----------
+
+  document.addEventListener('click', async e => {
+    const el = e.target.closest('button, a');
+    if (!el) return;
+    const ds = el.dataset;
+
+    if (ds.close) { closeModal(); return; }
+    if (ds.go) { go(ds.go); return; }
+    if (ds.day) { state.date = ds.day; go('home'); return; }
+    if (ds.student) { state.userId = ds.student; go('student'); return; }
+    if (ds.file) { openSubmission(ds.file, ds.name); return; }
+    if (ds.mat) { openMaterial(Number(ds.mat)); return; }
+    if (ds.url) { window.open(ds.url, '_blank', 'noopener'); return; }
+
+    if (ds.form) {
+      state.form = { todoId: ds.form, date: ds.date, userId: ds.user || '' };
+      go('form');
+      return;
+    }
+
+    if (ds.pick) {
+      el.classList.toggle('on');
+      backupDraft();
+      return;
+    }
+
+    if (ds.save) {
+      const submit = ds.save === '1';
+      el.disabled = true;
+      try {
+        state.formData = await call('apiSaveEntry', state.form.todoId, state.form.date, collectForm(), submit);
+        clearDraft();
+        $view.innerHTML = viewForm(state.formData);
+        toast(submit ? '提出しました' : '下書きを保存しました');
+        window.scrollTo(0, 0);
+      } catch (err) { fail(err); el.disabled = false; }
+      return;
+    }
+
+    if (ds.upload) {
+      pending = { todoId: ds.upload, date: ds.date, btn: el };
+      picker.click();
+      return;
+    }
+
+    if (ds.toggle) {
+      el.disabled = true;
+      try {
+        const data = await call('apiToggle', ds.toggle, ds.date, ds.done !== '1');
+        if (state.route === 'home') { state.date = ds.date; rerender(data); } else { state.home = data; go(state.route); }
+      } catch (err) { fail(err); el.disabled = false; }
+      return;
+    }
+
+    if (ds.remove) {
+      if (!confirm('この提出を取り消しますか？（ファイルは削除されます）')) return;
+      el.disabled = true;
+      try {
+        const data = await call('apiRemoveSubmission', ds.remove);
+        closeModal();
+        toast('取り消しました');
+        if (STAFF) { $view.innerHTML = viewStudent(data); } else { rerender(data); }
+      } catch (err) { fail(err); el.disabled = false; }
+      return;
+    }
+
+    if (ds.feedback) {
+      const box = document.getElementById('fb-' + ds.feedback);
+      const text = box ? box.value.trim() : '';
+      if (!text) { toast('コメントを入力してください', true); return; }
+      el.disabled = true;
+      try {
+        const data = await call('apiSaveFeedback', state.userId, ds.feedback, text);
+        state.date = ds.feedback;
+        $view.innerHTML = viewStudent(data);
+        const t = document.getElementById('d-' + ds.feedback);
+        if (t) t.scrollIntoView({ block: 'start' });
+        toast('コメントを送りました');
+      } catch (err) { fail(err); el.disabled = false; }
+      return;
+    }
+
+    if (ds.copy) {
+      try { await navigator.clipboard.writeText(ds.copy); toast('コピーしました'); }
+      catch (err) { toast('コピーできませんでした。欄を長押ししてコピーしてください', true); }
+      return;
+    }
+
+    if (ds.issue) {
+      el.disabled = true;
+      try { $view.innerHTML = viewLinks(await call('apiIssueTokens')); toast('発行しました'); }
+      catch (err) { fail(err); el.disabled = false; }
+    }
+  });
+
+  async function init() {
+    try {
+      if (!B.role) Object.assign(B, await call('apiMe'));
+    } catch (e) {
+      $view.innerHTML = `<section class="card"><h2>リンクが確認できませんでした</h2><p style="margin:0">このアプリは、お一人ずつにお送りした専用のリンクから開いてください。リンクがわからない場合は、掛川東病院の宮地さんにお問い合わせください。</p></section>`;
+      return;
+    }
+    STAFF = B.role === 'staff' || B.role === 'admin';
+    ADMIN = B.role === 'admin';
+    go('home');
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>
