@@ -364,7 +364,7 @@
   }
 
   function feedbackHtml(list) {
-    return list.map(f => `<div class="fb"><div class="by">${esc(f.by)}（${esc(f.at)}）</div><p>${esc(f.text)}</p></div>`).join('');
+    return list.map(f => `<div class="fb"><div class="by">${esc(f.by)}（${esc(f.at)}${f.onsite ? '・現地で記入' : ''}）</div><p>${esc(f.text)}</p></div>`).join('');
   }
 
   // ---------- 学生 ----------
@@ -459,7 +459,26 @@
       </section>
       ${t.upload ? `<section class="card"><h2>添付ファイル（任意）</h2>${subsHtml(t.subs) || '<p class="muted" style="margin:0">添付はありません。</p>'}
         ${d.readonly ? '' : `<div style="margin-top:10px"><button class="btn sm ghost" data-upload="${esc(t.id)}" data-date="${t.date}">📎 写真・ファイルを添付</button></div>`}</section>` : ''}
-      ${d.feedback.length ? `<section class="card"><h2>担当者からのコメント</h2>${feedbackHtml(d.feedback)}</section>` : ''}`;
+      ${t.id === 'checkout' && !d.readonly ? onsiteHtml(d) : d.feedback.length ? `<section class="card"><h2>担当者からのコメント</h2>${feedbackHtml(d.feedback)}</section>` : ''}`;
+  }
+
+  function onsiteHtml(d) {
+    return `
+      <section class="card">
+        <h2>担当者からのフィードバック</h2>
+        ${feedbackHtml(d.feedback) || '<p class="muted" style="margin:0">まだありません。宮地さんからのコメントは、あとでここに届きます。</p>'}
+        <div style="margin-top:12px"><button class="btn sm ghost" data-onsite-open="1">担当者に記入してもらう</button></div>
+        <div id="onsite" hidden>
+          <p class="notice" style="margin:12px 0 0">ここからは担当者の方が記入してください。送信すると学生側では書き換えられません。</p>
+          <label class="f" for="of-by">担当者のお名前 <span class="req">必須</span></label>
+          <input type="text" id="of-by" maxlength="40" placeholder="例：〇〇医師">
+          <label class="f" for="of-good">良かった点</label>
+          <textarea id="of-good" maxlength="1000"></textarea>
+          <label class="f" for="of-next">次に意識してほしいこと</label>
+          <textarea id="of-next" maxlength="1000"></textarea>
+          <div style="margin-top:10px"><button class="btn" data-onsite-save="1">フィードバックを送信</button></div>
+        </div>
+      </section>`;
   }
 
   function collectForm() {
@@ -735,6 +754,24 @@
     if (ds.pick) {
       el.classList.toggle('on');
       backupDraft();
+      return;
+    }
+
+    if (ds.onsiteOpen) {
+      const box = document.getElementById('onsite');
+      if (box) { box.hidden = false; el.hidden = true; document.getElementById('of-by').focus(); }
+      return;
+    }
+
+    if (ds.onsiteSave) {
+      const val = id => (document.getElementById(id) || {}).value || '';
+      el.disabled = true;
+      try {
+        state.formData = await call('apiSaveOnsiteFeedback', state.form.date, { by: val('of-by'), good: val('of-good'), next: val('of-next') });
+        $view.innerHTML = viewForm(state.formData);
+        restoreDraft();
+        toast('フィードバックを保存しました');
+      } catch (err) { fail(err); el.disabled = false; }
       return;
     }
 
