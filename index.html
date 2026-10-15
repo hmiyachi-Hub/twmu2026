@@ -309,7 +309,7 @@
   function slotHtml(s) {
     return `
       <div class="slot ${s.off ? 'off' : ''}">
-        <div class="when">${esc(s.slot)} ${stance(s.stance)}</div>
+        <div class="when">${esc(s.slot)} ${stance(s.stance)}${s.who ? ` <span class="chip gray">${esc(s.who)}</span>` : ''}</div>
         <div class="what">${esc(s.title)}</div>
         ${s.place || s.staff ? `<dl>
           ${s.place ? `<dt>場所</dt><dd>${esc(s.place)}</dd>` : ''}
